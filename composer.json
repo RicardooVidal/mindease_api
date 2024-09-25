@@ -1,5 +1,5 @@
 {
-    "name": "MindEase",
+    "name": "mindease/mindease",
     "type": "project",
     "description": "Api do projeto MindEase",
     "keywords": ["laravel", "framework"],

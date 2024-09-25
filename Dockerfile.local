@@ -1,0 +1,37 @@
+# Use the official PHP 8.2 image as the base image
+FROM php:8.2-cli
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    zip \
+    unzip \
+    git \
+    libzip-dev
+
+RUN set -eux \
+    && apt-get update \
+    && apt-get install -y libzip-dev zlib1g-dev \
+    && docker-php-ext-install zip
+
+# Install and enable the PostgreSQL extensions
+RUN docker-php-ext-install pdo pdo_pgsql pgsql mysqli pdo_mysql
+
+# Install and enable the Zip extension
+RUN docker-php-ext-install zip
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy the application files to the container
+COPY . .
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN chmod -R 0755 storage/
+
+# Expose the container port (if your app runs on a specific port)
+EXPOSE 8882
+
+CMD ["sh", "-c", "cp .env-docker .env && composer install --ignore-platform-reqs && php artisan serve --host=0.0.0.0 --port=8882"]
