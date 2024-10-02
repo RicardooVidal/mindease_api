@@ -25,7 +25,7 @@ class PatientRepository
 
     public function getById(int $id): ?Patient
     {
-        return $this->patient->find($id);
+        return $this->patient->findOrFail($id);
     }
 
     public function create(array $params): Patient

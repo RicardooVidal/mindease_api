@@ -16,4 +16,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resources([
         'patient' => PatientController::class
     ]);
+
+    Route::resources([
+        'waitlist' => \App\Http\Controllers\WaitListController::class
+    ]);
 });
