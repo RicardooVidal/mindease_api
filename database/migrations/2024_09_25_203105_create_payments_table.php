@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('service_id');
+            $table->bigInteger('consultation_id');
             $table->decimal('value')->nullable();
             $table->enum('status', ['pending', 'paid', 'not-paid'])->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->foreign('service_id')->references('id')->on('services');
+            $table->foreign('consultation_id')->references('id')->on('consultations');
         });
     }
 
@@ -29,7 +29,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->dropForeign('payments_service_id_foreign');
+            $table->dropForeign('payments_consultation_id_foreign');
             $table->dropIfExists();
         });
     }

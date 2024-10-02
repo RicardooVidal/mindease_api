@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('medical_records', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('service_id');
+            $table->bigInteger('consultation_id');
             $table->text('record')->nullable();
             $table->string('document')->nullable();
             $table->timestamps();
 
-            $table->foreign('service_id')->references('id')->on('services');
+            $table->foreign('consultation_id')->references('id')->on('consultations');
         });
     }
 
@@ -28,7 +28,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('medical_records', function (Blueprint $table) {
-            $table->dropForeign('medical_records_service_id_foreign');
+            $table->dropForeign('medical_records_consultation_id_foreign');
             $table->dropIfExists();
         });
     }
