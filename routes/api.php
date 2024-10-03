@@ -20,4 +20,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resources([
         'waitlist' => \App\Http\Controllers\WaitListController::class
     ]);
+
+    Route::resources([
+        'consultation' => \App\Http\Controllers\ConsultationController::class
+    ]);
 });

@@ -3,7 +3,7 @@
 namespace App\Domains\Patient\Repositories;
 
 use App\Domains\Patient\Entities\Patient;
-use mysql_xdevapi\Collection;
+use Illuminate\Support\Collection;
 
 class PatientRepository
 {
@@ -11,16 +11,19 @@ class PatientRepository
         private readonly Patient $patient
     ) {}
 
-    public function getAll(array $filters): Collection
+    public function getAll(array $filters, bool $paginated = true): Collection
     {
-        return $this->patient->all()?->map(fn($patient) => [
-            'id' => $patient->id,
-            'first_name' => $patient->first_name,
-            'last_name' => $patient->last_name,
-            'document' => $patient->document,
-            'active' => $patient->active,
-            'notes' => $patient->notes
-        ]);
+        return $this->patient
+            ->when(!empty($filters), fn($query) => $query->where($filters))
+            ->when($paginated, fn($query) => $query->paginate(10), fn($query) => $query->get())
+            ->map(fn($patient) => [
+                'id' => $patient->id,
+                'first_name' => $patient->first_name,
+                'last_name' => $patient->last_name,
+                'document' => $patient->document,
+                'active' => $patient->active,
+                'notes' => $patient->notes
+            ]);
     }
 
     public function getById(int $id): ?Patient

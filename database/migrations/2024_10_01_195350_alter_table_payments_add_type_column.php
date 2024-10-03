@@ -1,5 +1,6 @@
 <?php
 
+use App\Domains\Payment\Enums\PaymentTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,15 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-           $table->enum('type', [
-               'DINHEIRO',
-               'CARTAO_CREDITO',
-               'CARTAO_DEBITO',
-               'PIX',
-               'TRANSFERENCIA',
-               'OUTROS',
-               'PENDING'
-           ])->default('PENDING');
+           $table->enum('type', array_column(PaymentTypeEnum::cases(), 'value'))->default(PaymentTypeEnum::PENDING);
         });
     }
 

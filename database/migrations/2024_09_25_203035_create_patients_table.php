@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->integer('document');
+            $table->bigInteger('document');
             $table->boolean('active')->default('true');
             $table->text('notes')->nullable();
             $table->softDeletes();
