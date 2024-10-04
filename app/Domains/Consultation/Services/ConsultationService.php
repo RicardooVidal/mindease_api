@@ -17,6 +17,11 @@ class ConsultationService
         return $this->consultationRepository->getAll($filters)->toArray();
     }
 
+    public function getById(int $id): ?array
+    {
+        return $this->consultationRepository->getById($id)?->toArray();
+    }
+
     public function create(ConsultationParamsDTO $paramsDTO): array
     {
         return $this->consultationRepository

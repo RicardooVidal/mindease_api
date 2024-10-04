@@ -14,7 +14,16 @@ class ConsultationRepository
 
     public function getAll(array $filters = []): LengthAwarePaginator
     {
-        return $this->consultation->when(!empty($filters), fn($query) => $query->where($filters))->paginate(10);
+        return $this->consultation
+            ->with(['patient:id,first_name,last_name'])
+            ->when(!empty($filters), fn($query) => $query->where($filters))->paginate(10);
+    }
+
+    public function getById(int $id): ?Consultation
+    {
+        return $this->consultation
+            ->with(['patient:id,first_name,last_name'])
+            ->find($id);
     }
 
     public function create(array $params): Consultation
