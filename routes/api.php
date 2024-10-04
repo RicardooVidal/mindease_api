@@ -24,4 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resources([
         'consultation' => \App\Http\Controllers\ConsultationController::class
     ]);
+
+    Route::resources([
+        'payment' => \App\Http\Controllers\PaymentController::class
+    ]);
 });
