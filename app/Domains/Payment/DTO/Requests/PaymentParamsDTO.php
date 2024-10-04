@@ -25,6 +25,11 @@ class PaymentParamsDTO extends DataTransferObject
         return new self(...$request->all());
     }
 
+    public static function fromArray(array $data): self
+    {
+        return new self(...$data);
+    }
+
     private static function checkStatus(Request $request): Request
     {
         if (

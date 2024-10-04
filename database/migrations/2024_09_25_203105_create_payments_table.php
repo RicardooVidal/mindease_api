@@ -1,6 +1,5 @@
 <?php
 
-use App\Domains\Payment\Enums\PaymentStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,11 +15,14 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('consultation_id');
             $table->decimal('value')->nullable();
-            $table->enum('status', array_column(PaymentStatusEnum::cases(), 'value'))->nullable();
+            $table->enum('status', array_column(\App\Domains\Payment\Enums\PaymentStatusEnum::cases(), 'value'))->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->foreign('consultation_id')->references('id')->on('consultations');
+            $table->foreign('consultation_id')
+                ->references('id')
+                ->on('consultations')
+                ->onDelete('cascade');
         });
     }
 
