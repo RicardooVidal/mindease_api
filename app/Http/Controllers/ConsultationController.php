@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\Consultation\Entities\Consultation;
 use App\Domains\Consultation\DTO\Requests\ConsultationParamsDTO;
+use App\Domains\Consultation\Entities\Consultation;
 use App\Domains\Consultation\Services\ConsultationService;
 use App\Http\Requests\ConsultationRequest;
 use Illuminate\Http\JsonResponse;

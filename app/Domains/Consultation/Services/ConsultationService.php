@@ -2,9 +2,9 @@
 
 namespace App\Domains\Consultation\Services;
 
+use App\Domains\Consultation\DTO\Requests\ConsultationParamsDTO;
 use App\Domains\Consultation\Entities\Consultation;
 use App\Domains\Consultation\Repositories\ConsultationRepository;
-use App\Domains\Consultation\DTO\Requests\ConsultationParamsDTO;
 
 class ConsultationService
 {

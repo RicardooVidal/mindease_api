@@ -3,8 +3,8 @@
 namespace App\Domains\Consultation\Repositories;
 
 use App\Domains\Consultation\Entities\Consultation;
+use App\Domains\Consultation\Entities\Contract;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class ConsultationRepository
 {

@@ -17,9 +17,9 @@ class PatientService
         return $this->patientRepository->getAll($filters)->toArray();
     }
 
-    public function getById(int $id): array
+    public function getById(int $id): ?array
     {
-        return $this->patientRepository->getById($id)->toArray();
+        return $this->patientRepository->getById($id)?->toArray();
     }
 
     public function create(PatientParamsDTO $paramsDTO): array
