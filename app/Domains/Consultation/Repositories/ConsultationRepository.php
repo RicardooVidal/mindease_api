@@ -31,13 +31,13 @@ class ConsultationRepository
         return $this->consultation->create($params);
     }
 
-    public function updateByModel(Consultation $consultation, array $params): bool
+    public function update(int $id, array $params): bool
     {
-        return $consultation->update($params);
+        return $this->consultation->findOrFail($id)->update($params);
     }
 
-    public function deleteByModel(Consultation $consultation): void
+    public function delete(int $id): void
     {
-        $consultation->delete();
+        $this->consultation->findOrFail($id)->delete();
     }
 }

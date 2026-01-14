@@ -29,14 +29,14 @@ class PaymentService
             ->toArray();
     }
 
-    public function updateByModel(PaymentParamsDTO $paramsDTO, Payment $payment): bool
+    public function update(int $id, PaymentParamsDTO $paramsDTO): bool
     {
         return $this->paymentRepository
-            ->updateByModel($payment, $paramsDTO->toArray());
+            ->update($id, $paramsDTO->toArray());
     }
 
-    public function deleteByModel(Payment $payment): void
+    public function delete(int $id): void
     {
-        $this->paymentRepository->deleteByModel($payment);
+        $this->paymentRepository->delete($id);
     }
 }

@@ -47,11 +47,11 @@ class ConsultationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Consultation $consultation, ConsultationRequest $request): JsonResponse
+    public function update(int $id, ConsultationRequest $request): JsonResponse
     {
         $paramsDto = ConsultationParamsDTO::fromRequest($request);
 
-        $data = $this->consultationService->updateByModel($paramsDto, $consultation);
+        $data = $this->consultationService->update($id, $paramsDto);
 
         return response()->json($data, Response::HTTP_OK);
     }
@@ -59,9 +59,9 @@ class ConsultationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Consultation $consultation): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $this->consultationService->deleteByModel($consultation);
+        $this->consultationService->delete($id);
 
         return response()->json([], Response::HTTP_NO_CONTENT);
     }

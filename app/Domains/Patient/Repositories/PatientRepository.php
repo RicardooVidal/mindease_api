@@ -2,8 +2,13 @@
 
 namespace App\Domains\Patient\Repositories;
 
+use App\Data\Patient\IndexPatientData;
+use App\Data\Patient\PatientData;
 use App\Domains\Patient\Entities\Patient;
+use App\Helpers\DocumentHelper;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use MongoDB\BSON\Document;
 
 class PatientRepository
 {
@@ -11,53 +16,44 @@ class PatientRepository
         private readonly Patient $patient
     ) {}
 
-    public function getAll(array $filters, bool $paginated = true): Collection
+    public function getAll(IndexPatientData $filters, bool $paginated = true): Collection|LengthAwarePaginator
+    {
+        /** @var Collection|LengthAwarePaginator */
+        return $this->patient
+            ->query()
+            ->when(
+                $filters->uuid, fn($query) => $query->where('uuid', $filters->uuid)
+            )
+            ->when(
+                $filters->document, fn($query) =>
+                $query->where('document', DocumentHelper::removeMask($filters->document))
+            )
+            ->when(
+                $filters->firstName, fn($query) => $query->where('first_name', 'like', "%{$filters->firstName}%")
+            )
+            ->when($paginated, fn($query) => $query->paginate(10), fn($query) => $query->get());
+    }
+
+    public function getByUuid(string $uuid): ?PatientData
+    {
+        return PatientData::from($this->patient->where('uuid', $uuid)->firstOrFail()->toArray());
+    }
+
+    public function create(PatientData $patientData): Patient
+    {
+        return $this->patient->create($patientData->except('uuid')->toArray());
+    }
+
+    public function update(PatientData $patientData): bool
     {
         return $this->patient
-            ->when(!empty($filters), fn($query) => $query->where($filters))
-            ->when($paginated, fn($query) => $query->paginate(10), fn($query) => $query->get())
-            ->map(fn($patient) => [
-                'id' => $patient->id,
-                'first_name' => $patient->first_name,
-                'last_name' => $patient->last_name,
-                'document' => $patient->document,
-                'active' => $patient->active,
-                'notes' => $patient->notes
-            ]);
+            ->where('uuid', $patientData->uuid)
+            ->update($patientData->except('uuid')->toArray());
     }
 
-    public function getById(int $id): ?Patient
+    public function delete(string $uuid): void
     {
-        return $this->patient->findOrFail($id);
-    }
-
-    public function create(array $params): Patient
-    {
-        return $this->patient->create($params);
-    }
-
-    public function update(array $params): bool
-    {
-        return $this->patient->update($params);
-    }
-
-    public function delete(int $id): void
-    {
-        $patient = $this->patient->find($id);
-
-        if ($patient)
-        {
-            $patient->delete();
-        }
-    }
-
-    public function updateByModel(Patient $patient, array $params): bool
-    {
-        return $patient->update($params);
-    }
-
-    public function deleteByModel(Patient $patient): void
-    {
+        $patient = $this->patient->where('uuid', $uuid)->firstOrFail();
         $patient->delete();
     }
 }

@@ -25,9 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('wait_list', function (Blueprint $table) {
-           $table->dropForeign('wait_list_patient_id_foreign');
-           $table->dropIfExists();
-        });
+        // Drop the table; no need to drop foreign constraints by name (unsupported by some drivers)
+        Schema::dropIfExists('wait_list');
     }
 };

@@ -29,14 +29,14 @@ class ConsultationService
             ->toArray();
     }
 
-    public function updateByModel(ConsultationParamsDTO $paramsDTO, Consultation $consultation): bool
+    public function update(int $id, ConsultationParamsDTO $paramsDTO,): bool
     {
         return $this->consultationRepository
-            ->updateByModel($consultation, $paramsDTO->toArray());
+            ->update($id, $paramsDTO->toArray());
     }
 
-    public function deleteByModel(Consultation $consultation): void
+    public function delete(int $id): void
     {
-        $this->consultationRepository->deleteByModel($consultation);
+        $this->consultationRepository->delete($id);
     }
 }

@@ -48,11 +48,11 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Payment $payment, UpdatePaymentRequest $request): JsonResponse
+    public function update(int $id, UpdatePaymentRequest $request): JsonResponse
     {
         $paramsDto = PaymentParamsDTO::fromRequest($request);
 
-        $data = $this->paymentService->updateByModel($paramsDto, $payment);
+        $data = $this->paymentService->update($id, $paramsDto);
 
         return response()->json($data, Response::HTTP_OK);
     }
@@ -60,9 +60,9 @@ class PaymentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Payment $payment): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $this->paymentService->deleteByModel($payment);
+        $this->paymentService->delete($id);
 
         return response()->json([], Response::HTTP_NO_CONTENT);
     }

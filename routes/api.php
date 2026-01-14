@@ -1,31 +1,39 @@
 <?php
 
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\WaitListController;
+use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\CheckSchema;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware([CheckSchema::class, 'auth:sanctum'])->group(function () {
+        Route::resource('patient', PatientController::class)->names([
+            'index' => 'patient.index',
+            'store' => 'patient.store',
+            'show' => 'patient.show',
+            'update' => 'patient.update',
+            'destroy' => 'patient.destroy',
+        ]);
+
     Route::resources([
-        'patient' => PatientController::class
+        'waitlist' => WaitListController::class
     ]);
 
     Route::resources([
-        'waitlist' => \App\Http\Controllers\WaitListController::class
+        'consultation' => ConsultationController::class
     ]);
 
     Route::resources([
-        'consultation' => \App\Http\Controllers\ConsultationController::class
-    ]);
-
-    Route::resources([
-        'payment' => \App\Http\Controllers\PaymentController::class
+        'payment' => PaymentController::class
     ]);
 });

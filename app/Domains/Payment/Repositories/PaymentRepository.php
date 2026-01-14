@@ -30,13 +30,13 @@ class PaymentRepository
         return $this->payment->create($params);
     }
 
-    public function updateByModel(Payment $payment, array $params): bool
+    public function update(int $id, array $params): bool
     {
-        return $payment->update($params);
+        return $this->payment->findOrFail($id)->update($params);
     }
 
-    public function deleteByModel(Payment $payment): void
+    public function delete(int $id): void
     {
-        $payment->delete();
+        $this->payment->findOrFail($id)->delete();
     }
 }

@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('public.companies', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique(); // Keep the auto-increment `id` and add a separate `uuid` column
             $table->string('company');
             $table->string('name');
             $table->string('email');
-            $table->unsignedBigInteger('document')->unique();
+            $table->string('document')->unique();
             $table->string('contract')->nullable();
             $table->date('until');
             $table->boolean('active')->default(true);
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('public.companies');
+        Schema::dropIfExists('companies');
     }
 };

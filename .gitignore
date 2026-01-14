@@ -19,3 +19,11 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
+
+# Coverage reports
+/coverage-report
+/.coverage
+
+# Xdebug logs
+/storage/logs/xdebug.log
+

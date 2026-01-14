@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Patient\IndexPatientData;
+use App\Data\Patient\PatientData;
 use App\Domains\Patient\DTO\Requests\PatientParamsDTO;
 use App\Domains\Patient\Entities\Patient;
 use App\Domains\Patient\Services\PatientService;
 use App\Http\Requests\PatientRequest;
 use App\Http\Requests\UpdatePatientRequest;
+use Http\Controllers\PatientController\IndexTest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -17,56 +20,37 @@ class PatientController extends Controller
     ) {}
 
     /**
-     * Display a listing of the resource.
+     * @param IndexPatientData $request
+     * @return JsonResponse
+     * @see IndexTest
      */
-    public function index(): JsonResponse
+    public function index(IndexPatientData $request): JsonResponse
     {
-        $data = $this->patientService->getAll();
+        $data = $this->patientService->getAll($request);
 
         return response()->json($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(PatientRequest $request)
+   public function store(PatientData $request): PatientData
     {
-        $paramsDto = PatientParamsDTO::fromRequest($request);
-
-        $data = $this->patientService->create($paramsDto);
-
-        return response()->json($data, Response::HTTP_CREATED);
+        return $this->patientService->create($request)->wrap('data');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(string $uuid): PatientData
     {
-        $data = $this->patientService->getById($id);
-
-        return response()->json($data, Response::HTTP_OK);
+        return $this->patientService->getByUuid($uuid)->wrap('data');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Patient $patient, UpdatePatientRequest $request): JsonResponse
+    public function update(string $uuid, PatientData $request): PatientData
     {
-        $paramsDto = PatientParamsDTO::fromRequest($request);
+        $request->uuid = $uuid;
+        $this->patientService->update($request);
 
-        $data = $this->patientService->updateByModel($paramsDto, $patient);
-
-        return response()->json($data, Response::HTTP_OK);
+        return $this->show($request->uuid);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Patient $patient): JsonResponse
+    public function destroy(string $uuid): void
     {
-        $this->patientService->deleteByModel($patient);
-
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        $this->patientService->delete($uuid);
     }
 }

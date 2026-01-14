@@ -2,6 +2,8 @@
 
 namespace App\Domains\Patient\Services;
 
+use App\Data\Patient\IndexPatientData;
+use App\Data\Patient\PatientData;
 use App\Domains\Patient\DTO\Requests\PatientParamsDTO;
 use App\Domains\Patient\Entities\Patient;
 use App\Domains\Patient\Repositories\PatientRepository;
@@ -12,31 +14,31 @@ class PatientService
         private readonly PatientRepository $patientRepository
     ) {}
 
-    public function getAll(array $filters = []): array
+    public function getAll(IndexPatientData $filters): array
     {
         return $this->patientRepository->getAll($filters)->toArray();
     }
 
-    public function getById(int $id): ?array
+    public function getByUuid(string $uuid): ?PatientData
     {
-        return $this->patientRepository->getById($id)?->toArray();
+        return $this->patientRepository->getByUuid($uuid);
     }
 
-    public function create(PatientParamsDTO $paramsDTO): array
+    public function create(PatientData $patientData): PatientData
     {
-        return $this->patientRepository
-            ->create($paramsDTO->toArray())
-            ->toArray();
+        return PatientData::from($this->patientRepository
+            ->create($patientData)
+            ->toArray()
+        );
     }
 
-    public function updateByModel(PatientParamsDTO $paramsDTO, Patient $patient): bool
+    public function update(PatientData $patientData): bool
     {
-        return $this->patientRepository
-            ->updateByModel($patient, $paramsDTO->toArray());
+        return $this->patientRepository->update($patientData);
     }
 
-    public function deleteByModel(Patient $patient): void
+    public function delete(string $uuid): void
     {
-        $this->patientRepository->deleteByModel($patient);
+        $this->patientRepository->delete($uuid);
     }
 }

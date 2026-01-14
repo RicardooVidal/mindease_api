@@ -27,9 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('medical_records', function (Blueprint $table) {
-            $table->dropForeign('medical_records_consultation_id_foreign');
-            $table->dropIfExists();
-        });
+        // Drop the table instead of dropping foreign keys by name (not supported by SQLite)
+        Schema::dropIfExists('medical_records');
     }
 };
