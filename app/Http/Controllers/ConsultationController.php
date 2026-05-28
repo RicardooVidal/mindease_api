@@ -2,67 +2,71 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Consultation\ConsultationData;
+use App\Data\Consultation\IndexConsultationData;
 use App\Domains\Consultation\DTO\Requests\ConsultationParamsDTO;
 use App\Domains\Consultation\Entities\Consultation;
 use App\Domains\Consultation\Services\ConsultationService;
+use App\Domains\Patient\Entities\Patient;
+use App\Domains\Patient\Services\PatientService;
+use App\Exceptions\PatientNotActiveException;
 use App\Http\Requests\ConsultationRequest;
+use Http\Controllers\ConsultationController\IndexTest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ConsultationController extends Controller
 {
     public function __construct(
-        private ConsultationService $consultationService
+        private ConsultationService $consultationService,
+        private PatientService $patientService,
     ) {}
 
-    public function index(): JsonResponse
+    /**
+     * @param IndexConsultationData $request
+     * @return JsonResponse
+     * @see IndexTest
+     */
+    public function index(IndexConsultationData $filters): JsonResponse
     {
-        $data = $this->consultationService->getAll();
+        $data = $this->consultationService->getAll($filters);
 
-        return response()->json($data);
+        return response()->json(['data' => $data]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @throws PatientNotActiveException
      */
-    public function store(ConsultationRequest $request)
+    public function store(ConsultationData $request): ConsultationData
     {
-        $paramsDto = ConsultationParamsDTO::fromRequest($request);
+        $patient = Patient::query()->where('uuid', $request->patient->uuid)->first();
 
-        $data = $this->consultationService->create($paramsDto);
+        if (!$patient->active) {
+            throw new PatientNotActiveException();
+        }
 
-        return response()->json($data, Response::HTTP_CREATED);
+        return $this->consultationService->create($request, $patient)->wrap('data');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(string $uuid): ConsultationData
     {
-        $data = $this->consultationService->getById($id);
-
-        return response()->json($data, Response::HTTP_OK);
+        return $this->consultationService->getByUuid($uuid)->wrap('data');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(int $id, ConsultationRequest $request): JsonResponse
+    public function update(ConsultationData $request): ConsultationData
     {
-        $paramsDto = ConsultationParamsDTO::fromRequest($request);
+        $patient = Patient::query()->where('uuid', $request->patient->uuid)->first();
 
-        $data = $this->consultationService->update($id, $paramsDto);
+        if (!$patient->active) {
+            throw new PatientNotActiveException();
+        }
 
-        return response()->json($data, Response::HTTP_OK);
+        return $this->consultationService->update($request, $patient)->wrap('data');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id): JsonResponse
+    public function destroy(string $uuid): void
     {
-        $this->consultationService->delete($id);
-
-        return response()->json([], Response::HTTP_NO_CONTENT);
+        $this->consultationService->delete($uuid);
     }
 }

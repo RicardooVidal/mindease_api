@@ -2,11 +2,15 @@
 
 namespace App\Domains\Contract\Services;
 
+use App\Data\Consultation\ConsultationData;
+use App\Data\Contract\ContractData;
+use App\Data\Contract\IndexContractData;
 use App\Domains\Contract\Entities\Contract;
 use App\Domains\Contract\Repositories\ContractRepository;
 use App\Domains\Contract\DTO\Requests\ContractParamsDTO;
 use App\Domains\Contract\Transforms\TransformContract;
 use App\Domains\Contract\Transforms\TransformContracts;
+use App\Domains\Patient\Entities\Patient;
 
 class ContractService
 {
@@ -14,37 +18,32 @@ class ContractService
         private readonly ContractRepository $contractRepository
     ) {}
 
-    public function create(ContractParamsDTO $paramsDTO): array
+    public function create(ContractData $contractData, string $document): ContractData
     {
-        return $this->contractRepository
-            ->create($paramsDTO->toArray())
-            ->toArray();
+        return ContractData::fromModel(
+            $this->contractRepository->create($contractData, $document)
+        );
     }
 
-    public function getAll(array $filters = []): array
+    public function getAll(IndexContractData $filters): array
     {
         return $this->contractRepository->getAll($filters)->toArray();
     }
 
-    public function getById(int $id): ?array
+    public function getByUuid(string $uuid): ContractData
     {
-        $contract = $this->contractRepository->getById($id);
-
-        if ($contract) {
-            return TransformContract::execute($contract);
-        }
-
-        return [];
+        return ContractData::fromModel(
+            $this->contractRepository->getByUuid($uuid)
+        );
     }
 
-    public function updateByModel(ContractParamsDTO $paramsDTO, Contract $contract): bool
+    public function update(ContractData $contractData, Patient $patient): bool
     {
-        return $this->contractRepository
-            ->updateByModel($contract, $paramsDTO->toArray());
+        return $this->contractRepository->update($contractData, $patient);
     }
 
-    public function deleteByModel(Contract $contract): void
+    public function delete(string $uuid): void
     {
-        $this->contractRepository->deleteByModel($contract);
+        $this->contractRepository->delete($uuid);
     }
 }

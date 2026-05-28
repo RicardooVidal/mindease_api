@@ -2,6 +2,7 @@
 
 namespace App\Domains\Patient\Services;
 
+use App\Data\WaitList\WaitListData;
 use App\Domains\Patient\Entities\Patient;
 use App\Domains\Patient\Repositories\WaitListRepository;
 
@@ -11,15 +12,16 @@ class WaitListService
         private readonly WaitListRepository $waitListRepository
     ) {}
 
-    public function create(int $patientId): array
+    public function create(WaitListData $waitListData): WaitListData
     {
-        return $this->waitListRepository
-            ->create($patientId)
-            ->toArray();
+        return WaitListData::from([
+            'uuid' => $this->waitListRepository->create($waitListData)->uuid,
+            'patient_uuid' => $waitListData->patientUuid,
+        ]);
     }
 
-    public function delete(int $patientId): void
+    public function delete(string $uuid): void
     {
-        $this->waitListRepository->delete($patientId);
+        $this->waitListRepository->delete($uuid);
     }
 }

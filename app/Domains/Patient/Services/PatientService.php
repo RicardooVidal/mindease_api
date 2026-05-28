@@ -19,9 +19,14 @@ class PatientService
         return $this->patientRepository->getAll($filters)->toArray();
     }
 
-    public function getByUuid(string $uuid): ?PatientData
+    public function select(IndexPatientData $filters): array
     {
-        return $this->patientRepository->getByUuid($uuid);
+        return $this->patientRepository->select($filters)->toArray();
+    }
+
+    public function getByUuid(string $uuid): PatientData
+    {
+        return PatientData::from($this->patientRepository->getByUuid($uuid)?->toArray());
     }
 
     public function create(PatientData $patientData): PatientData

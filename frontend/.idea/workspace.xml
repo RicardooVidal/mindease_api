@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="87b43d72-e895-4c39-a384-e94e1f30f49c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../app/Attributes/Description.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Data/Casts/CarbonCast.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Data/Consultation/ConsultationData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Data/Consultation/IndexConsultationData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Data/Consultation/UpdateConsultationData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Data/Contract/ContractData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Data/Contract/IndexContractData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Data/Contract/UpdateContractData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Data/Patient/UpdatePatientData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Data/WaitList/WaitListData.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Domains/Consultation/Enums/ConsultationTimeEnum.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Domains/Consultation/Enums/ConsultationTypeEnum.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Exceptions/PatientNotActiveException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Traits/WithDescription.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../database/factories/ConsultationFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../database/factories/ContractFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../database/factories/WaitListFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ConsultationController/DestroyTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ConsultationController/IndexTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ConsultationController/ShowTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ConsultationController/StoreTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ConsultationController/UpdateTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ContractController/DestroyTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ContractController/IndexTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ContractController/ShowTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ContractController/StoreTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/ContractController/UpdateTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/WaitListController/DestroyTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tests/Http/Controllers/WaitListController/StoreTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Data/Patient/PatientData.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Data/Patient/PatientData.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Consultation/Entities/Consultation.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Consultation/Entities/Consultation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Consultation/Repositories/ConsultationRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Consultation/Repositories/ConsultationRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Consultation/Services/ConsultationService.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Consultation/Services/ConsultationService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Contract/Entities/Contract.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Contract/Entities/Contract.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Contract/Repositories/ContractRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Contract/Repositories/ContractRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Contract/Services/ContractService.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Contract/Services/ContractService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Patient/Entities/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Patient/Entities/Patient.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Patient/Entities/WaitList.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Patient/Entities/WaitList.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Patient/Repositories/PatientRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Patient/Repositories/PatientRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Patient/Repositories/WaitListRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Patient/Repositories/WaitListRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Patient/Services/PatientService.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Patient/Services/PatientService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Domains/Patient/Services/WaitListService.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Domains/Patient/Services/WaitListService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Controllers/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Controllers/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Controllers/ConsultationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Controllers/ConsultationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Controllers/ContractController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Controllers/ContractController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Controllers/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Controllers/PatientController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Controllers/WaitListController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Controllers/WaitListController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Requests/ConsultationRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Requests/ConsultationRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Models/Company.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Models/Company.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../artisan" beforeDir="false" afterPath="$PROJECT_DIR$/../artisan" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../database/migrations/tenant/2024_09_25_203049_create_wait_list_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/../database/migrations/tenant/2024_09_25_203049_create_wait_list_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../database/migrations/tenant/2024_09_25_203054_create_contracts_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/../database/migrations/tenant/2024_09_25_203054_create_contracts_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../database/migrations/tenant/2024_09_25_203100_create_consultations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/../database/migrations/tenant/2024_09_25_203100_create_consultations_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../database/migrations/tenant/2024_10_02_200651_alter_table_consultations_add_time_column.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../phpunit.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../phpunit.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/../routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/DestroyTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/DestroyTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/IndexTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/IndexTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/ShowTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/ShowTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/StoreTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/StoreTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/UpdateTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/Http/Controllers/PatientController/UpdateTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tests/TestCase.php" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/TestCase.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/home/ricardo/Documents/projects/mindease/mindease_environment/mindease_api/frontend" value="3DKGAxOYw6PneIMcT8zQZVtpf7X" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3DKGAxOYw6PneIMcT8zQZVtpf7X" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/ricardo/Documents/projects/mindease/mindease_environment/mindease_api/frontend&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-PS-261.23567.149" />
+        <option value="bundled-php-predefined-a98d8de5180a-022fa7b8ab75-com.jetbrains.php.sharedIndexes-PS-261.23567.149" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="87b43d72-e895-4c39-a384-e94e1f30f49c" name="Changes" comment="" />
+      <created>1778023208368</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1778023208368</updated>
+      <workItem from="1778023210522" duration="66000" />
+      <workItem from="1778023777469" duration="46000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Consultation\ConsultationData;
+use App\Data\Contract\ContractData;
+use App\Data\Contract\IndexContractData;
 use App\Domains\Contract\DTO\Requests\ContractParamsDTO;
 use App\Domains\Contract\Services\ContractService;
+use App\Domains\Patient\Entities\Patient;
+use App\Domains\Patient\Services\PatientService;
 use App\Helpers\StorageHelper;
 use App\Http\Requests\ContractRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 ini_set('upload_max_filesize', '10M');
 ini_set('post_max_size', '10M');
@@ -17,69 +22,44 @@ ini_set('memory_limit', '128M');
 class ContractController extends Controller
 {
     public function __construct(
-        private ContractService $contractService
+        private ContractService $contractService,
     ) {}
 
-    public function index(): JsonResponse
+    public function index(IndexContractData $request): JsonResponse
     {
-        $data = $this->contractService->getAll();
+        $data = $this->contractService->getAll($request);
 
-        return response()->json($data);
+        return response()->json(['data' => $data]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(ContractRequest $request): JsonResponse
+    public function store(ContractData $request): ContractData
     {
-        $paramsDto = ContractParamsDTO::fromRequest($request);
-        $path = StorageHelper::upload($paramsDto->document, 'document_test.pdf', 'test');
+        $document = StorageHelper::upload(
+            file: $request->file,
+            name: "contract_patient_{$request->patient->uuid}.{$request->file->extension()}",
+            path: 'contracts'
+        );
 
-        $path = Storage::url($path);
-        dd($path);
-
-        $data = $this->contractService->create($paramsDto);
-
-        return response()->json($data, Response::HTTP_CREATED);
+        return $this->contractService->create($request, $document)->wrap('data');
     }
 
-    /**
-    * Display the specified resource.
-    */
-    public function show(string $id)
+    public function show(string $uuid): ContractData
     {
-        $data = $this->contractService->getById($id);
-
-        $filename = 'contract_' . $id . '_' . time() . '.pdf';
-
-        $data['document'] = stream_get_contents($data['document']);
-
-        Storage::disk('local')->put($filename, pg_unescape_bytea($data['document']));
-
-        $fileUrl = Storage::url($filename);
-
-        return response()->json(['url' => $fileUrl], Response::HTTP_OK);
+        return $this->contractService->getByUuid($uuid)->wrap('data');
     }
-//
-//    /**
-//     * Update the specified resource in storage.
-//     */
-//    public function update(Consultation $consultation, ConsultationRequest $request): JsonResponse
+
+//    public function update(ContractData $contract): ContractData
 //    {
-//        $paramsDto = ConsultationParamsDTO::fromRequest($request);
+//        /** @var Patient $patient */
+//        $patient = Patient::query()->select(['id'])->where('uuid', $contract->patient->uuid)->firstOrFail();
 //
-//        $data = $this->consultationService->updateByModel($paramsDto, $consultation);
+//        $this->contractService->update($contract->except('file'), $patient);
 //
-//        return response()->json($data, Response::HTTP_OK);
+//        return $this->show($contract->uuid);
 //    }
-//
-//    /**
-//     * Remove the specified resource from storage.
-//     */
-//    public function destroy(Consultation $consultation): JsonResponse
-//    {
-//        $this->consultationService->deleteByModel($consultation);
-//
-//        return response()->json([], Response::HTTP_NO_CONTENT);
-//    }
+
+    public function destroy(string $uuid): void
+    {
+        $this->contractService->delete($uuid);
+    }
 }

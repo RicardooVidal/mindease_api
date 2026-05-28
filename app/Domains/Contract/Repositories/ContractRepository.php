@@ -2,8 +2,13 @@
 
 namespace App\Domains\Contract\Repositories;
 
+use App\Data\Contract\ContractData;
+use App\Data\Contract\IndexContractData;
 use App\Domains\Contract\Entities\Contract;
-use Illuminate\Pagination\LengthAwarePaginator;
+use App\Domains\Patient\Entities\Patient;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class ContractRepository
 {
@@ -11,33 +16,64 @@ class ContractRepository
         private readonly Contract $contract
     ) {}
 
-    public function getAll(array $filters = []): LengthAwarePaginator
+    public function getAll(IndexContractData $filters): Collection
     {
         return $this->contract
-            ->with(['patient:id,first_name,last_name'])
-            ->when(!empty($filters), fn($query) => $query->where($filters))->paginate(10);
+            ->with(['patient:id,uuid,name'])
+            ->when($filters->uuid, fn($query, $uuid) => $query->where('uuid', $uuid))
+            ->when(
+                $filters->validUntil,
+                fn(Builder$query, Carbon $validUntil) => $query->whereBetween('valid_until', [
+                    $validUntil->startOfDay()->toDateTimeString(),
+                    $validUntil->endOfDay()->toDateTimeString(),
+                ]))
+            ->when(
+                $filters->description,
+                fn(Builder $query, string $description) =>
+                    $query->where('description', 'like', "%$description%")
+                )
+            ->when(
+                $filters->patientUuid,
+                fn(Builder $query, string $patientUuid) =>
+                    $query->whereHas('patient', fn ($q) => $q->where('uuid', $patientUuid))
+            )
+            ->get()
+            ->makeHidden(['document', 'patient_id']);
     }
 
-    public function getById(int $id): ?Contract
+    public function getByUuid(string $uuid): ?Contract
     {
         return $this->contract
-            ->with(['patient:id,first_name,last_name'])
-            ->find($id);
+            ->with(['patient:id,uuid,name'])
+            ->where('uuid', $uuid)
+            ->firstOrFail();
     }
 
 
-    public function create(array $params): Contract
+    public function create(ContractData $contractData, string $document): Contract
     {
-        return $this->contract->create($params);
+        $contract = $this->contract->make([...$contractData->toArray(), 'document' => $document]);
+
+        $patient = Patient::query()
+            ->where('uuid', $contractData->patient->uuid)
+            ->firstOrFail();
+
+        $contract->patient()->associate($patient);
+        $contract->save();
+
+        return $contract;
     }
 
-    public function updateByModel(Contract $contract, array $params): bool
+    public function update(ContractData $contractData, Patient $patient): bool
     {
-        return $contract->update($params);
+        $contract = $this->contract->where('uuid', $contractData->uuid)->firstOrFail();
+        $contract->patient()->associate($patient);
+
+        return $contract->update($contractData->toArray());
     }
 
-    public function deleteByModel(Contract $contract): void
+    public function delete(string $uuid): void
     {
-        $contract->delete();
+        Contract::query()->where('uuid', $uuid)->firstOrFail()->delete();
     }
 }

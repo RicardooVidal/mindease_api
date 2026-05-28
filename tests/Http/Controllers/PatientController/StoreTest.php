@@ -1,8 +1,9 @@
 <?php
 
-namespace Http\Controllers\PatientController;
+namespace Tests\Http\Controllers\PatientController;
 
 use App\Domains\Patient\Entities\Patient;
+use App\Enums\GenderEnum;
 use App\Http\Controllers\PatientController;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
@@ -34,9 +35,11 @@ class StoreTest extends TestCase
     public function sucesso(): void
     {
         $parametros = [
-            'first_name' => $this->faker->name,
-            'last_name' => $this->faker->lastName,
+            'name' => $this->faker->name,
             'document' => $this->faker->cpf(false),
+            'phone' => $this->faker->phoneNumber,
+            'gender' => $this->faker->randomElement(GenderEnum::cases()),
+            'email' => $this->faker->email,
             'active' => true,
             'notes' => $this->faker->text,
         ];
@@ -47,18 +50,22 @@ class StoreTest extends TestCase
             ->postJson($this->rota(), $parametros)
             ->assertCreated()
             ->assertJsonFragment([
-                'first_name' => $parametros['first_name'],
-                'last_name' => $parametros['last_name'],
+                'name' => $parametros['name'],
                 'document' => $parametros['document'],
+                'phone' => $parametros['phone'],
+                'gender' => $parametros['gender'],
+                'email' => $parametros['email'],
                 'active' => $parametros['active'],
                 'notes' => $parametros['notes'],
             ])
             ->assertJsonStructure([
                 'data' => [
                     'uuid',
-                    'first_name',
-                    'last_name',
+                    'name',
                     'document',
+                    'phone',
+                    'gender',
+                    'email',
                     'active',
                     'notes',
                 ]
@@ -70,7 +77,7 @@ class StoreTest extends TestCase
         TestDox('Deve retornar erro para parâmetros inválidos'),
         DataProvider('parametrosInvalidosDataProvider')
     ]
-    public function parametrosInvalidos(array $parametro): void
+    public function erroParametrosInvalidos(array $parametro): void
     {
         $this->login();
 
@@ -82,26 +89,38 @@ class StoreTest extends TestCase
             ]);
     }
 
+    #[
+        Test,
+        TestDox('Deve retornar erro ao tentar cadastrar paciente sem estar logado'),
+    ]
+    public function erroNaoLogado(): void
+    {
+        $parametros = [
+            'name' => $this->faker->name,
+            'document' => $this->faker->cpf(false),
+            'phone' => $this->faker->phoneNumber,
+            'gender' => $this->faker->randomElement(GenderEnum::cases()),
+            'email' => $this->faker->email,
+            'active' => true,
+            'notes' => $this->faker->text,
+        ];
+
+        $this
+            ->postJson($this->rota(), $parametros)
+            ->assertUnauthorized();
+    }
+
     public static function parametrosInvalidosDataProvider(): array
     {
         return [
-            'first_name inválido' => [
-                ['first_name' => true]
+            'name inválido' => [
+                ['name' => true]
             ],
-            'first_name min' => [
-                ['first_name' => 'a']
+            'name min' => [
+                ['name' => 'a']
             ],
-            'first_name max' => [
-                ['first_name' => str_repeat('a', 256)]
-            ],
-            'last_name inválido' => [
-                ['last_name' => true]
-            ],
-            'last_name min' => [
-                ['last_name' => 'a']
-            ],
-            'last_name max' => [
-                ['last_name' => str_repeat('a', 256)]
+            'name max' => [
+                ['name' => str_repeat('a', 256)]
             ],
             'document inválido' => [
                 ['document' => true]
@@ -109,8 +128,26 @@ class StoreTest extends TestCase
             'document min' => [
                 ['document' => '123456789']
             ],
+            'phone inválido' => [
+                ['phone' => true]
+            ],
+           'phone min' => [
+               ['phone' => '1234']
+           ],
+           'phone max' => [
+               ['phone' => '1234567890123456']
+           ],
+           'email inválido' => [
+               ['email' => true]
+           ],
+           'email max' => [
+               ['email' => str_repeat('a', 101)]
+           ],
             'active inválido' => [
                 ['active' => 'invalido']
+            ],
+            'gender inválido' => [
+                ['gender' => 'invalido']
             ],
             'notes inválido' => [
                 ['notes' => true]

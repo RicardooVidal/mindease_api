@@ -11,8 +11,9 @@ class IndexPatientData extends Data
 {
     public function __construct(
         public ?string $uuid = null,
-        public ?string $firstName = null,
+        public ?string $name = null,
         public ?string $document = null,
+        public ?bool $active = null
     ) {}
 
     public static function rules(): array
@@ -22,7 +23,7 @@ class IndexPatientData extends Data
                 'nullable',
                 'uuid',
             ],
-            'first_name' => [
+            'name' => [
                 'nullable',
                 'string',
                 'min:3',
@@ -33,6 +34,10 @@ class IndexPatientData extends Data
                 'string',
                 'max:11',
             ],
+            'active' => [
+                'nullable',
+                'boolean',
+            ]
         ];
     }
 }

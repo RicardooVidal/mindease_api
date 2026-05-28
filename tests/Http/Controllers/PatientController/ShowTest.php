@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Controllers\PatientController;
+namespace Tests\Http\Controllers\PatientController;
 
 use App\Domains\Patient\Entities\Patient;
 use App\Http\Controllers\PatientController;
@@ -62,13 +62,23 @@ class ShowTest extends TestCase
     }
 
     #[Test, TestDox('Deve retornar 404 para paciente inexistente')]
-    public function pacienteInexistente(): void
+    public function erroPacienteInexistente(): void
     {
         $this->login();
 
         $this
             ->getJson($this->rota($this->faker->uuid))
             ->assertNotFound();
+    }
+
+    #[Test, TestDox('Deve retornar erro ao tentar exibir um paciente sem estar logado')]
+    public function erroNaoLogado(): void
+    {
+        $patient = $this->criarPaciente();
+
+        $this
+            ->getJson($this->rota($patient->uuid))
+            ->assertUnauthorized();
     }
 
     private function criarPaciente(): Patient

@@ -2,18 +2,20 @@
 
 namespace App\Domains\Patient\Entities;
 
+use App\Domains\Consultation\Entities\Consultation;
+use App\Enums\GenderEnum;
 use App\Models\Traits\HasUuid;
 use Database\Factories\PatientFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 /**
  * @property-read int $id
  * @property string $uuid
- * @property string $first_name
- * @property string $last_name
+ * @property string $name
  * @property string $document
  * @property bool $active
  * @property string|null $notes
@@ -26,13 +28,25 @@ use Illuminate\Support\Carbon;
 class Patient extends Model
 {
     use HasFactory, HasUuid, SoftDeletes;
+
+    protected $hidden = ['id'];
+
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'name',
         'document',
         'active',
+        'phone',
+        'gender',
+        'email',
         'notes',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'gender' => GenderEnum::class,
+        ];
+    }
 
     public static function newFactory(): PatientFactory
     {

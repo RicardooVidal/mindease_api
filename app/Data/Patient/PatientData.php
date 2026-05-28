@@ -2,17 +2,27 @@
 
 namespace App\Data\Patient;
 
+use App\Domains\Patient\Entities\Patient;
+use App\Enums\GenderEnum;
 use Illuminate\Validation\Rule;
+use Spatie\LaravelData\Attributes\FromRouteParameterProperty;
+use Spatie\LaravelData\Attributes\MapName;
+use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 use Spatie\LaravelData\Support\Validation\ValidationContext;
 
+#[Type, MapName(SnakeCaseMapper::class)]
 class PatientData extends Data
 {
     public function __construct(
+        #[FromRouteParameterProperty('patient')]
         public ?string $uuid = null,
-        public ?string $first_name = null,
-        public ?string $last_name = null,
+        public ?string $name = null,
         public ?string $document = null,
+        public ?string $phone = null,
+        public ?GenderEnum $gender = null,
+        public ?string $email = null,
         public ?bool $active = null,
         public ?string $notes = null,
     )
@@ -21,16 +31,33 @@ class PatientData extends Data
 
     public static function rules(ValidationContext $context): array
     {
+        if (!$context->path->isRoot()) {
+            return [
+                'uuid' => [
+                    'required',
+                    'uuid',
+                    Rule::exists(Patient::class, 'uuid')
+                        ->withoutTrashed(),
+                ]
+            ];
+        }
+
+        $uuid = data_get($context->payload, 'uuid');
+
         return [
-            'first_name' => ['required', 'string', 'min:2', 'max:100'],
-            'last_name' => ['required', 'string', 'min:2', 'max:100'],
+            'name' => ['required', 'string', 'min:2', 'max:100'],
             'document' => [
                 'required',
                 'string',
                 'min:11',
                 'max:14',
-                Rule::unique('patients', 'document')->withoutTrashed()
+                Rule::unique('patients', 'document')
+                    ->withoutTrashed()
+                    ->ignore($uuid, 'uuid')
             ],
+            'phone' => ['required', 'string', 'min:10', 'max:15'],
+            'gender' => ['required', Rule::in(GenderEnum::cases())],
+            'email' => ['required', 'email', 'max:100'],
             'active' => ['required', 'boolean'],
             'notes' => ['nullable', 'string', 'max:500']
         ];

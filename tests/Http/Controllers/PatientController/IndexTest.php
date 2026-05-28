@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Controllers\PatientController;
+namespace Tests\Http\Controllers\PatientController;
 
 use App\Domains\Patient\Entities\Patient;
 use App\Http\Controllers\PatientController;
@@ -41,6 +41,10 @@ class IndexTest extends TestCase
 
         $data = collect(self::mapRecursive($params, compact('patient')));
 
+        if (!empty($params['active'])) {
+            $patient->update(['active' => false]);
+        }
+
         if ($data->has(0)) {
             $data = null;
         }
@@ -52,13 +56,10 @@ class IndexTest extends TestCase
             ->assertOk()
             ->assertJsonCount($data ? 1 : $patients->count(), 'data')
             ->assertJsonStructure([
-                'current_page',
                 'data' => [
                     [
-                        'id',
                         'uuid',
-                        'first_name',
-                        'last_name',
+                        'name',
                         'document',
                         'active',
                         'notes',
@@ -70,11 +71,11 @@ class IndexTest extends TestCase
     }
 
     #[Test, TestDox('Deve retornar erro para parâmetros inválidos')]
-    public function parametrosInvalidos(): void
+    public function erroParametrosInvalidos(): void
     {
         $parametros = [
             'uuid' => 'uuid-invalido',
-            'first_name' => 'ab',
+            'name' => 'ab',
             'document' => str_repeat('1', 50),
         ];
 
@@ -85,18 +86,19 @@ class IndexTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonValidationErrors([
                 'uuid',
-                'first_name',
+                'name',
                 'document',
             ]);
     }
 
-    private function criarPacientes(): Collection
+    #[
+        Test,
+        TestDox('Deve retornar erro ao tentar deletar um paciente sem estar logado'),
+    ]
+    public function erroNaoLogado(): void
     {
-        collect(range(1, 5))->each(function() {
-            Patient::factory()->create();
-        });
-
-        return Patient::all();
+        $this->getJson($this->rota())
+            ->assertUnauthorized();
     }
 
     public static function filtroDataProvider(): array
@@ -109,11 +111,23 @@ class IndexTest extends TestCase
                 ['uuid' => fn(Patient $patient) => $patient->uuid]
             ],
             'filtro por nome' => [
-                ['first_name' => fn(Patient $patient) => $patient->first_name]
+                ['name' => fn(Patient $patient) => $patient->name]
             ],
             'filtro por documento' => [
                 ['document' => fn(Patient $patient) => $patient->document]
             ],
+            'filtro por ativo' => [
+                ['active' => fn(Patient $patient) => false]
+            ],
         ];
+    }
+
+    protected function criarPacientes(): Collection
+    {
+        collect(range(1, 5))->each(function() {
+            Patient::factory()->create();
+        });
+
+        return Patient::all();
     }
 }

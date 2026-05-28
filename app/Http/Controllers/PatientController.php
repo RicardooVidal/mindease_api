@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Data\Patient\IndexPatientData;
 use App\Data\Patient\PatientData;
+use App\Data\SelectData;
+use App\Data\SelectDataCollection;
 use App\Domains\Patient\DTO\Requests\PatientParamsDTO;
 use App\Domains\Patient\Entities\Patient;
 use App\Domains\Patient\Services\PatientService;
@@ -28,7 +30,14 @@ class PatientController extends Controller
     {
         $data = $this->patientService->getAll($request);
 
-        return response()->json($data);
+        return response()->json(['data' => $data]);
+    }
+
+    public function select(IndexPatientData $request): SelectDataCollection
+    {
+        $data = $this->patientService->select($request);
+
+        return (new SelectDataCollection(SelectData::class, $data))->wrap('data');
     }
 
    public function store(PatientData $request): PatientData
@@ -41,9 +50,8 @@ class PatientController extends Controller
         return $this->patientService->getByUuid($uuid)->wrap('data');
     }
 
-    public function update(string $uuid, PatientData $request): PatientData
+    public function update(PatientData $request): PatientData
     {
-        $request->uuid = $uuid;
         $this->patientService->update($request);
 
         return $this->show($request->uuid);

@@ -2,9 +2,12 @@
 
 namespace App\Domains\Consultation\Services;
 
+use App\Data\Consultation\ConsultationData;
+use App\Data\Consultation\IndexConsultationData;
 use App\Domains\Consultation\DTO\Requests\ConsultationParamsDTO;
 use App\Domains\Consultation\Entities\Consultation;
 use App\Domains\Consultation\Repositories\ConsultationRepository;
+use App\Domains\Patient\Entities\Patient;
 
 class ConsultationService
 {
@@ -12,31 +15,37 @@ class ConsultationService
         private readonly ConsultationRepository $consultationRepository
     ) {}
 
-    public function getAll(array $filters = []): array
+    public function getAll(IndexConsultationData $filters): array
     {
         return $this->consultationRepository->getAll($filters)->toArray();
     }
 
-    public function getById(int $id): ?array
+    public function getByUuid(string $uuid): ConsultationData
     {
-        return $this->consultationRepository->getById($id)?->toArray();
+        return ConsultationData::from($this->consultationRepository->getByUuid($uuid));
     }
 
-    public function create(ConsultationParamsDTO $paramsDTO): array
+    public function create(ConsultationData $consultationData, Patient $patient): ConsultationData
     {
-        return $this->consultationRepository
-            ->create($paramsDTO->toArray())
-            ->toArray();
+        $consultation = $this->consultationRepository->create($consultationData);
+        $consultation->patient()->associate($patient);
+        $consultation->save();
+
+        return ConsultationData::from($consultation);
     }
 
-    public function update(int $id, ConsultationParamsDTO $paramsDTO,): bool
+    public function update(ConsultationData $consultationData, Patient $patient): ConsultationData
     {
-        return $this->consultationRepository
-            ->update($id, $paramsDTO->toArray());
+        $this->consultationRepository->update($consultationData);
+        $consultation = Consultation::query()->where('uuid', $consultationData->uuid)->firstOrFail();
+        $consultation->patient()->associate($patient);
+        $consultation->save();
+
+        return ConsultationData::from($consultation);
     }
 
-    public function delete(int $id): void
+    public function delete(string $uuid): void
     {
-        $this->consultationRepository->delete($id);
+        $this->consultationRepository->delete($uuid);
     }
 }

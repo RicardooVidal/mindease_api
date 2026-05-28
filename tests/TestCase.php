@@ -65,7 +65,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * @throws ReflectionException
      */
-    private static function chamarCallbackComParametros(callable $callback, array $params): string
+    private static function chamarCallbackComParametros(callable $callback, array $params): mixed
     {
         $refFunc = new ReflectionFunction(Closure::fromCallable($callback));
 

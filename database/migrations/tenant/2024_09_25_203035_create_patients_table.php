@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\GenderEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,9 +15,11 @@ return new class extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('name');
             $table->bigInteger('document');
+            $table->string('phone');
+            $table->string('email');
+            $table->enum('gender', array_column(GenderEnum::cases(), 'value'));
             $table->boolean('active')->default('true');
             $table->text('notes')->nullable();
             $table->softDeletes();

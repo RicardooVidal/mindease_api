@@ -2,16 +2,22 @@
 
 namespace App\Http\Requests;
 
+use App\Data\Consultation\ConsultationData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ConsultationRequest extends FormRequest
 {
     public function rules(): array
     {
-        return [
-            'patient_id' => ['required', 'integer', 'exists:patients,id'],
-            'date' => ['required', 'date', 'date_format:Y-m-d'],
-            'time' => ['nullable', 'string', 'date_format:H:i'],
-        ];
+        return ConsultationData::rules($this->getValidationContext());
+    }
+
+    private function getValidationContext()
+    {
+        return new \Spatie\LaravelData\Support\Validation\ValidationContext(
+            payload: $this->all(),
+            fullPayload: $this->all(),
+            dataClass: ConsultationData::class
+        );
     }
 }

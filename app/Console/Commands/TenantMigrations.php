@@ -36,7 +36,7 @@ class TenantMigrations extends Command
         $this->createMigrationsTableIfNotExists();
 
         $this->runTenantMigrations();
-        
+
         $this->info("Migrations executed successfully for schema: {$schemaName}");
     }
 
@@ -45,7 +45,7 @@ class TenantMigrations extends Command
         $query = "CREATE SCHEMA IF NOT EXISTS {$schemaName}";
         DB::statement($query);
 
-        DatabaseHelper::changeSchema($schemaName);
+        DatabaseHelper::changeSchema(schema: $schemaName);
 
         $this->info("Schema {$schemaName} checked successfully.");
     }

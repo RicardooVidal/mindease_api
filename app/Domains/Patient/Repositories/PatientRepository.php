@@ -6,6 +6,8 @@ use App\Data\Patient\IndexPatientData;
 use App\Data\Patient\PatientData;
 use App\Domains\Patient\Entities\Patient;
 use App\Helpers\DocumentHelper;
+use App\Scopes\PatientScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use MongoDB\BSON\Document;
@@ -20,23 +22,22 @@ class PatientRepository
     {
         /** @var Collection|LengthAwarePaginator */
         return $this->patient
-            ->query()
-            ->when(
-                $filters->uuid, fn($query) => $query->where('uuid', $filters->uuid)
-            )
-            ->when(
-                $filters->document, fn($query) =>
-                $query->where('document', DocumentHelper::removeMask($filters->document))
-            )
-            ->when(
-                $filters->firstName, fn($query) => $query->where('first_name', 'like', "%{$filters->firstName}%")
-            )
-            ->when($paginated, fn($query) => $query->paginate(10), fn($query) => $query->get());
+            ->withGlobalScope('patients', new PatientScope($filters))
+            ->get();
     }
 
-    public function getByUuid(string $uuid): ?PatientData
+    public function select(IndexPatientData $filters): Collection
     {
-        return PatientData::from($this->patient->where('uuid', $uuid)->firstOrFail()->toArray());
+        /** @var Collection|LengthAwarePaginator */
+        return $this->patient
+            ->withGlobalScope('patients', new PatientScope($filters))
+            ->select(['uuid', 'name'])
+            ->get();
+    }
+
+    public function getByUuid(string $uuid): Patient
+    {
+        return $this->patient->where('uuid', $uuid)->firstOrFail();
     }
 
     public function create(PatientData $patientData): Patient
@@ -53,7 +54,6 @@ class PatientRepository
 
     public function delete(string $uuid): void
     {
-        $patient = $this->patient->where('uuid', $uuid)->firstOrFail();
-        $patient->delete();
+        $this->patient->where('uuid', $uuid)->firstOrFail()?->delete();
     }
 }

@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
+            $table->uuid()->unique();
             $table->bigInteger('patient_id');
             $table->string('description');
             $table->date('valid_until')->nullable();
-            $table->string('pdf')->nullable();
+            $table->string('document')->nullable();
             $table->timestamps();
 
             $table->foreign('patient_id')->references('id')->on('patients');

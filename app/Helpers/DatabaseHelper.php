@@ -2,20 +2,26 @@
 
 namespace App\Helpers;
 
+use App\Models\Company;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class DatabaseHelper
 {
-    public static function changeSchema(string $schema = 'public'): void
+    public static function changeSchema(string $companyUuid = null, string $schema = 'public'): void
     {
         $driver = DB::connection()->getDriverName();
 
-        if ($driver === 'sqlite') {
+        if ($driver === 'sqlite' || (!$companyUuid && $schema === 'public')) {
             return;
         }
 
-        $schema = Str::replace('"', '""', $schema);
+        $company = Company::query()
+            ->select(['uuid', 'company'])
+            ->where('uuid', $companyUuid)
+            ->first();
+
+        $schema = Str::replace('"', '""', $company->company ?? $schema);
         DB::statement('SET search_path TO "' . $schema . '"');
     }
 }

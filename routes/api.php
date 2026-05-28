@@ -4,6 +4,8 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\WaitListController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ContractController;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -14,26 +16,29 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')
+    ->middleware('auth:sanctum');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/companies', [AuthController::class, 'companies'])
+    ->whereUuid('user')
+    ->name('companies')
+    ->middleware('auth:sanctum');
 
     Route::middleware([CheckSchema::class, 'auth:sanctum'])->group(function () {
-        Route::resource('patient', PatientController::class)->names([
-            'index' => 'patient.index',
-            'store' => 'patient.store',
-            'show' => 'patient.show',
-            'update' => 'patient.update',
-            'destroy' => 'patient.destroy',
+        Route::resource('patient', PatientController::class)->except(['update']);
+        Route::group(['prefix' => 'patient', 'as' => 'patient.'], function () {
+            Route::get('/select/get', [PatientController::class, 'select'])->name('select');
+            Route::put('/', [PatientController::class, 'update'])->name('update');
+        });
+
+        Route::resources(['wait-list' => WaitListController::class]);
+        Route::resource('contract', ContractController::class)->except(['update']);
+//        Route::put('contract', [ContractController::class, 'update'])->name('contract.update');
+
+        Route::resource('consultation', ConsultationController::class)->except(['update']);
+        Route::put('consultation', [ConsultationController::class, 'update'])->name('consultation.update');
+
+        Route::resources([
+            'payment' => PaymentController::class
         ]);
-
-    Route::resources([
-        'waitlist' => WaitListController::class
-    ]);
-
-    Route::resources([
-        'consultation' => ConsultationController::class
-    ]);
-
-    Route::resources([
-        'payment' => PaymentController::class
-    ]);
 });

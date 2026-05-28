@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Controllers\PatientController;
+namespace Tests\Http\Controllers\PatientController;
 
 use App\Domains\Patient\Entities\Patient;
 use App\Http\Controllers\PatientController;
@@ -46,13 +46,25 @@ class DestroyTest extends TestCase
         Test,
         TestDox('Deve retornar 404 ao tentar deletar um paciente inexistente'),
     ]
-    public function pacienteInexistente(): void
+    public function erroPacienteInexistente(): void
     {
         $this->login();
 
         $this
             ->deleteJson($this->rota($this->faker->uuid))
             ->assertNotFound();
+    }
+
+    #[
+        Test,
+        TestDox('Deve retornar erro ao tentar deletar um paciente sem estar logado'),
+    ]
+    public function erroNaoLogado(): void
+    {
+        $patient = $this->criarPaciente();
+
+        $this->deleteJson($this->rota($patient->uuid))
+            ->assertUnauthorized();
     }
 
     private function criarPaciente(): Patient

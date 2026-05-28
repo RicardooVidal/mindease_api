@@ -5,9 +5,11 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Carbon\Carbon;
+use Database\Factories\CompanyFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property-read string $id
@@ -19,6 +21,8 @@ use App\Models\Traits\HasUuid;
  * @property string|null $contract
  * @property Carbon $until
  * @property bool $active
+ *
+ * @method static CompanyFactory factory($count = null, $state = [])
  */
 class Company extends Model
 {
@@ -29,4 +33,14 @@ class Company extends Model
     ];
 
     protected $table = 'companies';
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public static function newFactory(): CompanyFactory
+    {
+        return CompanyFactory::new();
+    }
 }

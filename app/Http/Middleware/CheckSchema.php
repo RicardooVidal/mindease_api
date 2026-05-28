@@ -16,9 +16,8 @@ class CheckSchema
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = auth()->user()->company()->first();
-
-        DatabaseHelper::changeSchema($user->company);
+        $companyUuid = $request->header('X-Tenant');
+        DatabaseHelper::changeSchema($companyUuid);
 
         return $next($request);
     }

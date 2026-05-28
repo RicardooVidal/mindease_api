@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('wait_list', function (Blueprint $table) {
             $table->id();
+            $table->uuid()->unique();
             $table->bigInteger('patient_id');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('patient_id')->references('id')->on('patients');
         });
