@@ -29,7 +29,7 @@ class ConsultationRepository
     public function getAll(IndexConsultationData $filters): Collection
     {
         return $this->consultation
-            ->with(['patient:id,uuid,name,document'])
+            ->with(['patient:id,uuid,name,type,time,document'])
             ->when($filters->uuid, fn($query, $uuid) => $query->where('uuid', $uuid))
             ->when(
                 $filters->date,

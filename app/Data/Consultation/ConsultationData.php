@@ -54,7 +54,6 @@ class ConsultationData extends Data
             'date' => [
                 'required',
                 'date',
-                'date_format:Y-m-d',
                 'after_or_equal:today'
             ],
             'presence' => [

@@ -42,8 +42,6 @@ class IndexTest extends TestCase
 
         /** @var Consultation $consultation */
         $consultation = $consultas->first();
-        $consultation->time = ConsultationTimeEnum::THIRTY_MINUTES;
-        $consultation->type = ConsultationTypeEnum::DAILY;
         $consultation->date = now()->addMonth()->startOfDay();
         $consultation->save();
 
@@ -64,8 +62,6 @@ class IndexTest extends TestCase
                     [
                         'uuid',
                         'date',
-                        'type',
-                        'time',
                         'patient' => [
                             'uuid',
                             'name',
@@ -137,16 +133,6 @@ class IndexTest extends TestCase
                     'date' => fn(Consultation $consultation) => $consultation->date->format('Y-m-d')
                 ]
             ],
-            'filtro por type' => [
-                [
-                    'type' => fn(Consultation $consultation) => $consultation->type->value
-                ]
-            ],
-            'filtro por time' => [
-                [
-                    'time' => fn(Consultation $consultation) => $consultation->time->value
-                ]
-            ],
         ];
     }
 
@@ -166,16 +152,6 @@ class IndexTest extends TestCase
             'data inválido' => [
                 [
                     'date' => '2026-22-14'
-                ]
-            ],
-            'time inválido' => [
-                [
-                    'time' =>  'ab'
-                ]
-            ],
-            'type inválido' => [
-                [
-                    'type' =>  'ab'
                 ]
             ],
         ];
