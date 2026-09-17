@@ -3,6 +3,8 @@
 namespace App\Domains\Patient\Entities;
 
 use App\Domains\Consultation\Entities\Consultation;
+use App\Domains\Consultation\Enums\ConsultationTimeEnum;
+use App\Domains\Consultation\Enums\ConsultationTypeEnum;
 use App\Enums\GenderEnum;
 use App\Models\Traits\HasUuid;
 use Database\Factories\PatientFactory;
@@ -19,6 +21,8 @@ use Illuminate\Support\Carbon;
  * @property string $document
  * @property bool $active
  * @property string|null $notes
+ * @property bool $done
+ * @property float $value
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -39,12 +43,16 @@ class Patient extends Model
         'gender',
         'email',
         'notes',
+        'type',
+        'time',
     ];
 
     protected function casts(): array
     {
         return [
             'gender' => GenderEnum::class,
+            'type' => ConsultationTypeEnum::class,
+            'time' => ConsultationTimeEnum::class,
         ];
     }
 

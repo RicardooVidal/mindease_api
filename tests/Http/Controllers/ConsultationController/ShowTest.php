@@ -54,18 +54,25 @@ class ShowTest extends TestCase
         $response = $this
             ->getJson($this->rota($consultation->uuid))
             ->assertJsonFragment([
-                'uuid' => $consultation->uuid,
-                'date' => $consultation->date->toW3cString(),
-                'time' => $consultation->time->value,
-                'type' => $consultation->type->value,
-                'patient' => [
-                    'uuid' => $consultation->patient->uuid,
-                    'first_name' => $consultation->patient->first_name,
-                    'last_name' => $consultation->patient->last_name,
-                    'active' => null,
-                    'notes' => null,
-                    'document' => null,
-                ],
+                'data' => [
+                    'uuid' => $consultation->uuid,
+                    'date' => $consultation->date->toW3cString(),
+                    'presence' => $consultation->presence->value,
+                    'value' => $consultation->value,
+                    'notes' => $consultation->notes,
+                    'patient' => [
+                        'uuid' => $consultation->patient->uuid,
+                        'name' => $consultation->patient->name,
+                        'type' => $consultation->patient->type->value,
+                        'time' => $consultation->patient->time->value,
+                        'email' => null,
+                        'gender' => null,
+                        'phone' => null,
+                        'active' => null,
+                        'notes' => null,
+                        'document' => null,
+                    ],
+                ]
             ])
             ->assertOk();
     }

@@ -21,7 +21,7 @@ class ConsultationRepository
     public function getByUuid(string $uuid): Consultation
     {
         return $this->consultation
-            ->with(['patient:id,uuid,first_name,last_name'])
+            ->with(['patient:id,uuid,name,time,type'])
             ->where('uuid', $uuid)
             ->firstOrFail();
     }

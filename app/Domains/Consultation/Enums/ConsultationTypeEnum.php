@@ -15,6 +15,9 @@ enum ConsultationTypeEnum: string
     #[Description('Semanal')]
     case WEEKLY = 'weekly';
 
+    #[Description('Quinzenal')]
+    case BI_WEEKLY = 'bi-weekly';
+
     #[Description('Mensal')]
     case MONTHLY = 'monthly';
 }

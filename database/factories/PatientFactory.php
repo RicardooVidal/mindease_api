@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Domains\Consultation\Enums\ConsultationTimeEnum;
+use App\Domains\Consultation\Enums\ConsultationTypeEnum;
 use App\Domains\Contract\Entities\Contract;
 use App\Domains\Patient\Entities\Patient;
 use App\Enums\GenderEnum;
@@ -25,7 +27,9 @@ class PatientFactory extends Factory
             'email' => $this->faker->email,
             'gender' => $this->faker->randomElement(GenderEnum::cases()),
             'active' => true,
-            'notes' => $this->faker->text
+            'notes' => $this->faker->text,
+            'type' => $this->faker->randomElement(ConsultationTypeEnum::cases()),
+            'time' => $this->faker->randomElement(ConsultationTimeEnum::cases()),
         ];
     }
 }

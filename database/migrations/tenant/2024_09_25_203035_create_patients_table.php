@@ -1,5 +1,7 @@
 <?php
 
+use App\Domains\Consultation\Enums\ConsultationTimeEnum;
+use App\Domains\Consultation\Enums\ConsultationTypeEnum;
 use App\Enums\GenderEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -22,6 +24,8 @@ return new class extends Migration
             $table->enum('gender', array_column(GenderEnum::cases(), 'value'));
             $table->boolean('active')->default('true');
             $table->text('notes')->nullable();
+            $table->enum('type', array_column(ConsultationTypeEnum::cases(), 'value'));
+            $table->enum('time', array_column(ConsultationTimeEnum::cases(), 'value'));
             $table->softDeletes();
             $table->timestamps();
         });

@@ -2,6 +2,8 @@
 
 namespace App\Data\Patient;
 
+use App\Domains\Consultation\Enums\ConsultationTimeEnum;
+use App\Domains\Consultation\Enums\ConsultationTypeEnum;
 use App\Domains\Patient\Entities\Patient;
 use App\Enums\GenderEnum;
 use Illuminate\Validation\Rule;
@@ -25,6 +27,8 @@ class PatientData extends Data
         public ?string $email = null,
         public ?bool $active = null,
         public ?string $notes = null,
+        public ?ConsultationTypeEnum $type = null,
+        public ?ConsultationTimeEnum $time = null,
     )
     {
     }
@@ -56,10 +60,12 @@ class PatientData extends Data
                     ->ignore($uuid, 'uuid')
             ],
             'phone' => ['required', 'string', 'min:10', 'max:15'],
-            'gender' => ['required', Rule::in(GenderEnum::cases())],
+            'gender' => ['required', Rule::enum(GenderEnum::class)],
             'email' => ['required', 'email', 'max:100'],
             'active' => ['required', 'boolean'],
-            'notes' => ['nullable', 'string', 'max:500']
+            'notes' => ['nullable', 'string', 'max:500'],
+            'type' => ['required', Rule::enum(ConsultationTypeEnum::class)],
+            'time' => ['required', Rule::enum(ConsultationTimeEnum::class)],
         ];
     }
 }

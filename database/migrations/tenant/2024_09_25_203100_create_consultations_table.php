@@ -2,6 +2,7 @@
 
 use App\Domains\Consultation\Enums\ConsultationTimeEnum;
 use App\Domains\Consultation\Enums\ConsultationTypeEnum;
+use App\Enums\PresenceEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,8 +19,10 @@ return new class extends Migration
             $table->uuid()->unique();
             $table->bigInteger('patient_id');
             $table->date('date');
-            $table->enum('time', array_column(ConsultationTimeEnum::cases(), 'value'))->nullable();
-            $table->enum('type', array_column(ConsultationTypeEnum::cases(), 'value'))->nullable();
+            $table->enum('presence', array_column(PresenceEnum::cases(), 'value'))
+                ->default(PresenceEnum::PENDING->value);
+            $table->float('value', 8, 2)->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -96,6 +96,7 @@ class ContractData extends Data
         return [
             'valid_until.after' => 'A data de validade do contrato deve ser posterior a hoje',
             'file.required' => 'O arquivo do contrato é obrigatório',
+            'file.mimes' => 'Tipos suportados: pdf, doc, docx, xls e xlsx'
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Domains\Consultation\Entities\Consultation;
 use App\Domains\Consultation\Enums\ConsultationTimeEnum;
 use App\Domains\Consultation\Enums\ConsultationTypeEnum;
 use App\Domains\Patient\Entities\Patient;
+use App\Enums\PresenceEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ConsultationFactory extends Factory
@@ -16,8 +17,9 @@ class ConsultationFactory extends Factory
     {
         return [
             'date' => now(),
-            'time' => ConsultationTimeEnum::FIFTY_MINUTES,
-            'type' => ConsultationTypeEnum::WEEKLY,
+            'presence' => $this->faker->randomElement(PresenceEnum::cases())->value,
+            'value' => 35.50,
+            'notes' => $this->faker->text,
         ];
     }
 

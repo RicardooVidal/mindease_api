@@ -5,6 +5,7 @@ namespace App\Domains\Consultation\Entities;
 use App\Domains\Consultation\Enums\ConsultationTimeEnum;
 use App\Domains\Consultation\Enums\ConsultationTypeEnum;
 use App\Domains\Patient\Entities\Patient;
+use App\Enums\PresenceEnum;
 use App\Events\ConsultationCreatedEvent;
 use App\Models\Traits\HasUuid;
 use Carbon\Carbon;
@@ -19,9 +20,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read string $uuid
  * @property int $patient_id
  * @property Carbon $date
- * @property ConsultationTimeEnum $time
- * @property ConsultationTypeEnum $type
- * @property int $duration
+ * @property PresenceEnum $presence
+ * @property float|null $value
+ * @property string|null $notes
  *
  * @property-read Patient $patient
  *
@@ -37,22 +38,19 @@ class Consultation extends Model
 
     protected $fillable = [
         'date',
-        'type',
-        'time',
+        'presence',
+        'value',
+        'notes',
     ];
 
     protected function casts(): array
     {
         return [
             'date' => 'datetime',
-            'time' => ConsultationTimeEnum::class,
-            'type' => ConsultationTypeEnum::class,
+            'value' => 'float',
+            'presence' => PresenceEnum::class,
         ];
     }
-
-    protected $dispatchesEvents = [
-        'created' => ConsultationCreatedEvent::class,
-    ];
 
     public function patient(): BelongsTo
     {

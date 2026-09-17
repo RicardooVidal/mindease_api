@@ -2,6 +2,8 @@
 
 namespace Tests\Http\Controllers\PatientController;
 
+use App\Domains\Consultation\Enums\ConsultationTimeEnum;
+use App\Domains\Consultation\Enums\ConsultationTypeEnum;
 use App\Domains\Patient\Entities\Patient;
 use App\Enums\GenderEnum;
 use App\Http\Controllers\PatientController;
@@ -44,6 +46,8 @@ class UpdateTest extends TestCase
             'email' => $this->faker->email,
             'active' => false,
             'notes' => $this->faker->text,
+            'type' => $this->faker->randomElement(ConsultationTypeEnum::cases()),
+            'time' => $this->faker->randomElement(ConsultationTimeEnum::cases()),
         ];
 
         $this->login();
@@ -60,6 +64,8 @@ class UpdateTest extends TestCase
                 'email' => $parametros['email'],
                 'active' => $parametros['active'],
                 'notes' => $parametros['notes'],
+                'type' => $parametros['type'],
+                'time' => $parametros['time'],
             ])
             ->assertJsonStructure([
                 'data' => [
@@ -70,6 +76,8 @@ class UpdateTest extends TestCase
                     'email',
                     'active',
                     'notes',
+                    'type',
+                    'time',
                 ]
             ]);
     }
@@ -88,6 +96,8 @@ class UpdateTest extends TestCase
             'email' => $this->faker->email,
             'active' => false,
             'notes' => $this->faker->text,
+            'type' => $this->faker->randomElement(ConsultationTypeEnum::cases()),
+            'time' => $this->faker->randomElement(ConsultationTimeEnum::cases()),
         ];
 
         $this
@@ -129,6 +139,8 @@ class UpdateTest extends TestCase
             'email' => $this->faker->email,
             'active' => false,
             'notes' => $this->faker->text,
+            'type' => $this->faker->randomElement(ConsultationTypeEnum::cases()),
+            'time' => $this->faker->randomElement(ConsultationTimeEnum::cases()),
         ];
 
         $this
@@ -178,6 +190,12 @@ class UpdateTest extends TestCase
             'notes inválido' => [
                 ['notes' => true]
             ],
+            'type inválido' => [
+                ['type' => 'aaa']
+            ],
+            'time inválido' => [
+                ['time' => true]
+            ]
         ];
     }
 

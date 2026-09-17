@@ -8,6 +8,7 @@ use App\Domains\Consultation\Entities\Consultation;
 use App\Domains\Consultation\Enums\ConsultationTimeEnum;
 use App\Domains\Consultation\Enums\ConsultationTypeEnum;
 use App\Domains\Patient\Entities\Patient;
+use App\Enums\PresenceEnum;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelData\Attributes\FromRouteParameterProperty;
@@ -24,8 +25,9 @@ class ConsultationData extends Data
         public PatientData $patient,
         #[WithCast(CarbonCast::class)]
         public ?Carbon $date = null,
-        public ConsultationTimeEnum $time,
-        public ConsultationTypeEnum $type,
+        public ?PresenceEnum $presence,
+        public ?float $value,
+        public ?string $notes,
     )
     {}
 
@@ -34,11 +36,12 @@ class ConsultationData extends Data
         return new self(
             uuid: $consultation->uuid,
             patient: $consultation->relationLoaded('patient')
-                ? PatientData::from($consultation->patient->only(['id', 'uuid', 'first_name', 'last_name']))
+                ? PatientData::from($consultation->patient->only(['id', 'uuid', 'name', 'time', 'type',]))
                 : Optional::create(),
             date: $consultation->date,
-            time: $consultation->time,
-            type: $consultation->type,
+            presence: $consultation->presence,
+            value: $consultation->value,
+            notes: $consultation->notes,
         );
     }
 
@@ -54,16 +57,39 @@ class ConsultationData extends Data
                 'date_format:Y-m-d',
                 'after_or_equal:today'
             ],
-            'time' => [
+            'presence' => [
                 'required',
-                'int',
-                Rule::enum(ConsultationTimeEnum::class)
+                Rule::enum(PresenceEnum::class)
             ],
-            'type' => [
-                'required',
+            'value' => [
+                'nullable',
+                'decimal:2',
+                'min:0'
+            ],
+            'notes' => [
+                'nullable',
                 'string',
-                Rule::enum(ConsultationTypeEnum::class),
+                'max:500',
             ]
+        ];
+    }
+
+    public static function prepareForPipeline(array $properties): array
+    {
+        if (!empty($properties['value']) && !is_string($properties['value'])) {
+            $properties['value'] = number_format($properties['value'], 2);
+        }
+
+        return $properties;
+    }
+
+    public static function messages(...$args): array
+    {
+        return [
+            'patient.required' => 'O paciente é obrigatório.',
+            'date.after_or_equal' => 'A data da consulta deve ser hoje ou uma data futura.',
+            'presence.required' => 'O tipo de presença é obrigatório.',
+            'value.min' => 'O valor deve ser no mínimo 0'
         ];
     }
 }
