@@ -14,14 +14,14 @@ class PaymentRepository
     public function getAll(array $filters = []): LengthAwarePaginator
     {
         return $this->payment
-            ->with(['consultation:id,patient_id', 'consultation.patient:id,first_name,last_name'])
+            ->with(['appointment:id,patient_id', 'appointment.patient:id,first_name,last_name'])
             ->when(!empty($filters), fn($query) => $query->where($filters))->paginate(10);
     }
 
     public function getById(int $id): ?Payment
     {
         return $this->payment
-            ->with(['consultation:id,patient_id', 'consultation.patient:id,first_name,last_name'])
+            ->with(['appointment:id,patient_id', 'appointment.patient:id,first_name,last_name'])
             ->find($id);
     }
 

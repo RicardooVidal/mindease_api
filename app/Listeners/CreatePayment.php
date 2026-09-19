@@ -6,7 +6,7 @@ use App\Domains\Payment\DTO\Requests\PaymentParamsDTO;
 use App\Domains\Payment\Enums\PaymentStatusEnum;
 use App\Domains\Payment\Enums\PaymentTypeEnum;
 use App\Domains\Payment\Services\PaymentService;
-use App\Events\ConsultationCreatedEvent;
+use App\Events\AppointmentCreatedEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -22,10 +22,10 @@ class CreatePayment
     /**
      * Handle the event.
      */
-    public function handle(ConsultationCreatedEvent $event): void
+    public function handle(AppointmentCreatedEvent $event): void
     {
         $paramsDTO = PaymentParamsDTO::fromArray([
-            'consultation_id' => $event->consultation->id,
+            'appointment_id' => $event->appointment->id,
             'value' => 0,
             'status' => PaymentStatusEnum::PENDING->value,
             'notes' => null,

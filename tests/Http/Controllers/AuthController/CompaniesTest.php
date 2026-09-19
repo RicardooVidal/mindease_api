@@ -3,7 +3,7 @@
 namespace Http\Controllers\AuthController;
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\AppointmentController;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\URL;

@@ -12,7 +12,7 @@ class PaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'consultation_id' => ['required', 'integer', 'exists:payments,consultation_id'],
+            'appointment_id' => ['required', 'integer', 'exists:payments,appointment_id'],
             'value' => ['required', 'numeric', 'between:0,999999.99'],
             'status' => ['nullable', 'string', Rule::in(array_column(PaymentStatusEnum::cases(), 'value'))],
             'notes' => ['nullable', 'string', 'max:500'],

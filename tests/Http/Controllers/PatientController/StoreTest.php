@@ -2,8 +2,8 @@
 
 namespace Tests\Http\Controllers\PatientController;
 
-use App\Domains\Consultation\Enums\ConsultationTimeEnum;
-use App\Domains\Consultation\Enums\ConsultationTypeEnum;
+use App\Domains\Appointment\Enums\AppointmentTimeEnum;
+use App\Domains\Appointment\Enums\AppointmentTypeEnum;
 use App\Domains\Patient\Entities\Patient;
 use App\Enums\GenderEnum;
 use App\Http\Controllers\PatientController;
@@ -44,8 +44,8 @@ class StoreTest extends TestCase
             'email' => $this->faker->email,
             'active' => true,
             'notes' => $this->faker->text,
-            'type' => $this->faker->randomElement(ConsultationTypeEnum::cases()),
-            'time' => $this->faker->randomElement(ConsultationTimeEnum::cases()),
+            'type' => $this->faker->randomElement(AppointmentTypeEnum::cases()),
+            'time' => $this->faker->randomElement(AppointmentTimeEnum::cases()),
         ];
 
         $this->login();
@@ -111,8 +111,8 @@ class StoreTest extends TestCase
             'email' => $this->faker->email,
             'active' => true,
             'notes' => $this->faker->text,
-            'type' => $this->faker->randomElement(ConsultationTypeEnum::cases()),
-            'time' => $this->faker->randomElement(ConsultationTimeEnum::cases()),
+            'type' => $this->faker->randomElement(AppointmentTypeEnum::cases()),
+            'time' => $this->faker->randomElement(AppointmentTimeEnum::cases()),
         ];
 
         $this

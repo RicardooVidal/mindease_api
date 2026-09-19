@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('medical_records', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('consultation_id');
+            $table->bigInteger('appointment_id');
             $table->text('record')->nullable();
             $table->string('document')->nullable();
             $table->timestamps();
 
-            $table->foreign('consultation_id')->references('id')->on('consultations');
+            $table->foreign('appointment_id')->references('id')->on('appointments');
         });
     }
 

@@ -2,8 +2,8 @@
 
 namespace App\Data\Patient;
 
-use App\Domains\Consultation\Enums\ConsultationTimeEnum;
-use App\Domains\Consultation\Enums\ConsultationTypeEnum;
+use App\Domains\Appointment\Enums\AppointmentTimeEnum;
+use App\Domains\Appointment\Enums\AppointmentTypeEnum;
 use App\Domains\Patient\Entities\Patient;
 use App\Enums\GenderEnum;
 use Illuminate\Validation\Rule;
@@ -27,8 +27,8 @@ class PatientData extends Data
         public ?string $email = null,
         public ?bool $active = null,
         public ?string $notes = null,
-        public ?ConsultationTypeEnum $type = null,
-        public ?ConsultationTimeEnum $time = null,
+        public ?AppointmentTypeEnum $type = null,
+        public ?AppointmentTimeEnum $time = null,
     )
     {
     }
@@ -64,8 +64,8 @@ class PatientData extends Data
             'email' => ['required', 'email', 'max:100'],
             'active' => ['required', 'boolean'],
             'notes' => ['nullable', 'string', 'max:500'],
-            'type' => ['required', Rule::enum(ConsultationTypeEnum::class)],
-            'time' => ['required', Rule::enum(ConsultationTimeEnum::class)],
+            'type' => ['required', Rule::enum(AppointmentTypeEnum::class)],
+            'time' => ['required', Rule::enum(AppointmentTimeEnum::class)],
         ];
     }
 }

@@ -2,13 +2,13 @@
 
 namespace Http\Controllers\ContractController;
 
-use App\Domains\Consultation\Entities\Consultation;
-use App\Domains\Consultation\Enums\ConsultationTimeEnum;
-use App\Domains\Consultation\Enums\ConsultationTypeEnum;
+use App\Domains\Appointment\Entities\Appointment;
+use App\Domains\Appointment\Enums\AppointmentTimeEnum;
+use App\Domains\Appointment\Enums\AppointmentTypeEnum;
 use App\Domains\Contract\Entities\Contract;
 use App\Domains\Patient\Entities\Patient;
 use App\Exceptions\PatientNotActiveException;
-use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\PatientController;
 use Carbon\Carbon;

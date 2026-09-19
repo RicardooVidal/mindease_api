@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\Consultation\ConsultationData;
+use App\Data\Appointment\AppointmentData;
 use App\Data\Contract\ContractData;
 use App\Data\Contract\IndexContractData;
 use App\Domains\Contract\DTO\Requests\ContractParamsDTO;

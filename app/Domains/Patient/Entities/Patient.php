@@ -2,9 +2,9 @@
 
 namespace App\Domains\Patient\Entities;
 
-use App\Domains\Consultation\Entities\Consultation;
-use App\Domains\Consultation\Enums\ConsultationTimeEnum;
-use App\Domains\Consultation\Enums\ConsultationTypeEnum;
+use App\Domains\Appointment\Entities\Appointment;
+use App\Domains\Appointment\Enums\AppointmentTimeEnum;
+use App\Domains\Appointment\Enums\AppointmentTypeEnum;
 use App\Enums\GenderEnum;
 use App\Models\Traits\HasUuid;
 use Database\Factories\PatientFactory;
@@ -51,8 +51,8 @@ class Patient extends Model
     {
         return [
             'gender' => GenderEnum::class,
-            'type' => ConsultationTypeEnum::class,
-            'time' => ConsultationTimeEnum::class,
+            'type' => AppointmentTypeEnum::class,
+            'time' => AppointmentTimeEnum::class,
         ];
     }
 

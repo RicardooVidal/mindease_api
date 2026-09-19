@@ -14,15 +14,15 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('consultation_id');
+            $table->bigInteger('appointment_id');
             $table->decimal('value')->nullable();
             $table->enum('status', array_column(PaymentStatusEnum::cases(), 'value'))->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->foreign('consultation_id')
+            $table->foreign('appointment_id')
                 ->references('id')
-                ->on('consultations')
+                ->on('appointments')
                 ->onDelete('cascade');
         });
     }

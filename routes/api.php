@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\WaitListController;
-use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ContractController;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
@@ -35,8 +35,8 @@ Route::get('/companies', [AuthController::class, 'companies'])
         Route::resource('contract', ContractController::class)->except(['update']);
 //        Route::put('contract', [ContractController::class, 'update'])->name('contract.update');
 
-        Route::resource('consultation', ConsultationController::class)->except(['update']);
-        Route::put('consultation', [ConsultationController::class, 'update'])->name('consultation.update');
+        Route::resource('appointment', AppointmentController::class)->except(['update']);
+        Route::put('appointment', [AppointmentController::class, 'update'])->name('appointment.update');
 
         Route::resources([
             'payment' => PaymentController::class

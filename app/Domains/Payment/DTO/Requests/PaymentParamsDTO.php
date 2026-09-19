@@ -12,7 +12,7 @@ class PaymentParamsDTO extends DataTransferObject
     const STATUS = PaymentStatusEnum::PENDING->value;
     const TYPE = PaymentTypeEnum::PENDING->value;
 
-    public int $consultation_id;
+    public int $appointment_id;
     public float $value;
     public string $status = self::STATUS;
     public ?string $notes;
